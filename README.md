@@ -24,22 +24,10 @@ No special requirements.
 ## Screenshots
 
 ![index page](./assets/images/screenshot_index.jpeg)
-- Index page
+- Index page with the current day at the top of the calendar and time blocks that are color-coded for its hour
 
-![quetions correctly answered](./assets/images/screenshot_correctAnswer.jpeg)
-- Question correctly answered
-
-![quetions incorrectly answered](./assets/images/screenshot_wrongAnswer.jpeg)
-- Question incorrectly answered
-
-![save scores](./assets/images/screenshot_saveScores.jpeg)
-- Save initials and scores after game is over
-
-![view high scores](./assets/images/screenshot_viewHighScores.jpeg)
-- View high scores
-
-![clear high scores](./assets/images/screenshot_afterClearHighScores.jpeg)
-- After clearing high scores
+![quetions correctly answered](./assets/images/screenshot_saveEvent.jpeg)
+- Save event by entering into the time block.
 
 ## License
 Copyright © 2022 [Claire Cho](https://github.com/clairehwcho).
