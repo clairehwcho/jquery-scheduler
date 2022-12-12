@@ -10,12 +10,13 @@ $(function () {
   const currentDayEl = $("#currentDay");
   const timeblockEl = $(".time-block");
   const textareaEl = $(".description");
+  const saveMessageEl = $("<p>").attr("id", "save-message").html("Appointment added to <span>local storage</span>✅");
 
   // Handle displaying the current day.
   function renderToday () {
     const today = dayjs().format('dddd, MMMM Do');
     currentDayEl.text(today);
-  }
+  };
 
   // The getEventsFromStorage function and return array of event objects.
   function getEventsFromStorage () {
@@ -25,12 +26,12 @@ $(function () {
       storedEventsArr = JSON.parse(eventsFromStorage);
     }
     return storedEventsArr;
-  }
+  };
 
   // The storeEventsToStorage function saves an array of events in local storage.
   function storeEventsToStorage (storedEventsArr) {
     localStorage.setItem("events", JSON.stringify(storedEventsArr));
-  }
+  };
 
   // Get event data from local storage and display it on the page.
   function renderEventData () {
@@ -57,7 +58,7 @@ $(function () {
         })
       })
     }
-  }
+  };
 
   // The handleSaveEvent function stores event data in local storage.
   function handleSaveEvent (e) {
@@ -75,26 +76,54 @@ $(function () {
     let eventsArr = getEventsFromStorage();
 
     // Add the new event object to the array.
-    if (eventsArr.length !== 0) {
-      $(eventsArr).each(function (i) {
-        const oneEvent = eventsArr[i];
-        if (oneEvent[hour]) {
-          oneEvent[hour] = description;
-        }
-        else {
-          eventsArr.push(newEvent);
-        }
-      })
+    // If the event array saved in local storage is empty
+    if (eventsArr.length === 0) {
+      if (description !== "") {
+        eventsArr.push(newEvent);
+        console.log("A new event added");
+      }
+      else {
+        console.log("Nothing to update");
+        return;
+      }
     }
+    // If the event array saved in local storage is not empty
     else {
-      eventsArr.push(newEvent);
+      let isPresent = false;
+      while (!isPresent) {
+        // Loop through each event object in the array.
+        $(eventsArr).each(function (i) {
+          const storedEventObj = eventsArr[i];
+          // If the object already has the selected hour as a key, reset its value or remove the object.
+          if (storedEventObj.hasOwnProperty(hour)) {
+            if (storedEventObj[hour] === description) {
+              console.log("Nothing to update");
+              return;
+            }
+            else if (description !== "") {
+              storedEventObj[hour] = description;
+              console.log(`${hour} data updated`);
+              isPresent = true;
+            }
+            else {
+              eventsArr.splice($.inArray(storedEventObj[hour], eventsArr), 1);
+              console.log(`${hour} data removed`);
+              isPresent = true;
+            }
+          }
+        })
+      }
+      // If the array does not have the selected hour data, add the new object to the array.
+      if (!isPresent) {
+        eventsArr.push(newEvent);
+      }
     }
 
     // Save the array in local storage.
     storeEventsToStorage(eventsArr);
-
-    window.alert("Events have been successfully updated and added to local storage.");
-  }
+    console.log("Data updated in local storage")
+    saveMessageEl.insertAfter($("header"));
+  };
 
   // The setTimeblockColor sets the background color of each time block on page load.
   function setTimeblockColor () {
@@ -119,10 +148,18 @@ $(function () {
         timeblock.addClass("future")
       };
     })
-  }
+  };
+
+  // Remove the save confirmation message displayed on the top of timeblocks when any textarea is clicked.
+  function removeSaveMessage () {
+    saveMessageEl.remove();
+  };
 
   // The handleSaveEvent function is called when the save button is clicked.
   timeblockEl.on("click", ".saveBtn", handleSaveEvent);
+
+  // The removeSaveMessage is called when any textarea is clicked.
+  $("textarea").on("click", removeSaveMessage);
 
   // Run the functions on page load.
   renderToday();
