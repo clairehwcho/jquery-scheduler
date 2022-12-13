@@ -26,7 +26,7 @@ No special requirements.
 ![index page](./assets/images/screenshot_index.jpeg)
 - Index page with the current day at the top of the calendar and time blocks that are color-coded for its hour
 
-![save event](./assets/images/screenshot_saveEvent.png)
+![save event](./assets/images/screenshot_saveEvent.jpeg)
 - Save event by entering into the time block.
 
 ## License
