@@ -119,22 +119,13 @@ $(function () {
               return false;
             }
             else {
-              // If the array has more than 1 element, find the corresponding index of the element
-              if (eventsArr.length > 1) {
-                let idxToRemove;
-                $.each(eventsArr, function (i, obj) {
-                  if (obj.hasOwnProperty(hour)) {
-                    idxToRemove = i;
-                  }
-                });
-                eventsArr.splice(idxToRemove, 1);
-                console.log("localstorage splice test");
-              }
-              else {
-                localStorage.removeItem("events");
-                console.log("localstorage delete test");
-                console.log(eventsArr);
-              }
+              let idxToRemove;
+              $.each(eventsArr, function (i, obj) {
+                if (obj.hasOwnProperty(hour)) {
+                  idxToRemove = i;
+                }
+              });
+              eventsArr.splice(idxToRemove, 1);
               console.log(`${hour} data removed`);
               isPresent = true;
               return false;
@@ -155,11 +146,18 @@ $(function () {
           console.log("A new event added");
         }
       }
-    }
+    };
 
-    // Save the array in local storage.
-    storeEventsToStorage(eventsArr);
-    saveMessageEl.insertAfter($("header"));
+    // If the object in local storage is empty, remove the object.
+    if (jQuery.isEmptyObject(eventsArr)) {
+      localStorage.clear();
+      saveMessageEl.insertAfter($("header"));
+    }
+    // Or save the new array in local storage.
+    else {
+      storeEventsToStorage(eventsArr);
+      saveMessageEl.insertAfter($("header"));
+    }
   };
 
   // The setTimeblockColor sets the background color of each time block on page load.
